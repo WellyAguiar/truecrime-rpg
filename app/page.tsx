@@ -1,26 +1,53 @@
-import Link from "next/link"
-import { characters } from "@/data/characters"
+"use client"
+
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { generateRoomCode } from "@/lib/room"
 
 export default function Home() {
-  return (
-    <main className="p-10">
 
-      <h1 className="text-3xl font-bold mb-8">
-        Escolha seu personagem
+  const router = useRouter()
+  const [roomInput, setRoomInput] = useState("")
+
+  function createRoom() {
+    const code = generateRoomCode()
+    router.push(`/room/${code}`)
+  }
+
+  function joinRoom() {
+    if (!roomInput) return
+    router.push(`/room/${roomInput}`)
+  }
+
+  return (
+    <main className="p-10 space-y-6">
+
+      <h1 className="text-3xl font-bold">
+        RPG Investigação
       </h1>
 
-      <div className="grid grid-cols-2 gap-4">
+      <button
+        onClick={createRoom}
+        className="bg-green-600 px-4 py-2 rounded"
+      >
+        Criar sala
+      </button>
 
-        {characters.map((character) => (
-          <Link
-            key={character.id}
-            href={`/character/${character.id}`}
-            className="p-6 bg-zinc-800 rounded hover:bg-zinc-700"
-          >
-            <h2 className="text-xl">{character.name}</h2>
-            <p>Vida: {character.hp}</p>
-          </Link>
-        ))}
+      <div className="space-y-2">
+
+        <input
+          value={roomInput}
+          onChange={(e) => setRoomInput(e.target.value)}
+          placeholder="Código da sala"
+          className="px-4 py-2 text-black rounded"
+        />
+
+        <button
+          onClick={joinRoom}
+          className="bg-blue-600 px-4 py-2 rounded"
+        >
+          Entrar
+        </button>
 
       </div>
 
