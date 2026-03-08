@@ -11,14 +11,14 @@ export default function Home() {
 
       <div className="grid grid-cols-2 gap-4">
 
-        {characters.map((c) => (
+        {characters.map((character) => (
           <Link
-            key={c.id}
-            href={`/character/${c.id}`}
+            key={character.id}
+            href={`/character/${character.id}`}
             className="p-6 bg-zinc-800 rounded hover:bg-zinc-700"
           >
-            <h2 className="text-xl">{c.name}</h2>
-            <p>Vida: {c.hp}</p>
+            <h2 className="text-xl">{character.name}</h2>
+            <p>Vida: {character.hp}</p>
           </Link>
         ))}
 

@@ -1,14 +1,23 @@
 import { characters } from "@/data/characters"
 import DiceButtons from "@/components/dice-buttons"
 
-export default function CharacterPage({ params }: any) {
+export default async function CharacterPage({
+  params
+}: {
+  params: Promise<{ id: string }>
+}) {
 
+  const { id } = await params
   const character = characters.find(
-    (c) => c.id === params.id
+    (character) => character.id === id
   )
 
   if (!character) {
-    return <div>Personagem não encontrado</div>
+    return (
+      <div className="p-10">
+        Personagem não encontrado
+      </div>
+    )
   }
 
   return (
