@@ -7,7 +7,13 @@ import {
   rollDisadvantage
 } from "@/lib/dice"
 
-export default function DiceButtons() {
+type Props = {
+  character: string
+  playerName: string
+  roomId: string
+}
+
+export default function DiceButtons({ character, playerName, roomId }: Props) {
 
   const [rolling,setRolling] = useState(false)
   const [roll, setRoll] = useState<number | null>(null)
@@ -26,9 +32,27 @@ export default function DiceButtons() {
         setRoll(finalRoll)
         setResult(finalResult)
         setRolling(false)
+
+        sendRoll(finalRoll,finalResult)
       }
     }, 100)
   }
+  async function sendRoll(roll:number,result:string){
+
+  await fetch("/api/roll",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body: JSON.stringify({
+      roll,
+      result,
+      roomId,
+      playerName,
+      character
+    })
+  })
+}
   function normal() {
     const data = rollNormal()
     animateRoll(data.roll, data.result)
@@ -48,6 +72,7 @@ export default function DiceButtons() {
     <div className="space-y-4">
 
       <div className="flex gap-4">
+        <div>Rolando dado para: {character}</div>
 
         <button
           disabled={rolling}

@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Room {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  createdAt DateTime @default(now())
+
+  players   Player[]
+  rolls     Roll[]
+}
+
+model Player {
+  id        String   @id @default(cuid())
+  name      String
+  character String
+  hp        Int
+
+  roomId String
+  room   Room @relation(fields: [roomId], references: [id])
+
+  rolls Roll[]
+}
+
+model Roll {
+  id        String   @id @default(cuid())
+
+  value     Int
+  result    String
+
+  playerId String
+  player   Player @relation(fields: [playerId], references: [id])
+
+  roomId String
+  room   Room @relation(fields: [roomId], references: [id])
+
+  createdAt DateTime @default(now())
+}
